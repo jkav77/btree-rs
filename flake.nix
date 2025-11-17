@@ -29,8 +29,14 @@
       in
       {
         devShell = pkgs.mkShell {
-    
-          packages = with pkgs; [ rustToolchain rust-analyzer ];
+          name = "North Slope Behaviors";
+
+          packages = with pkgs; [
+            rustToolchain
+            rust-analyzer
+            vscode-extensions.vadimcn.vscode-lldb
+            nixfmt-rfc-style
+          ];
 
           shellHook = ''
             echo "Welcome to the btree dev shell"
