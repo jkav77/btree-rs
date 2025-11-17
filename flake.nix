@@ -29,7 +29,8 @@
       in
       {
         devShell = pkgs.mkShell {
-          packages = [ rustToolchain ];
+    
+          packages = with pkgs; [ rustToolchain rust-analyzer ];
 
           shellHook = ''
             echo "Welcome to the btree dev shell"
