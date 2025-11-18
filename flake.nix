@@ -36,6 +36,7 @@
             rust-analyzer
             vscode-extensions.vadimcn.vscode-lldb
             nixfmt-rfc-style
+            codex
           ];
 
           shellHook = ''
