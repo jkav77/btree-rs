@@ -1,7 +1,7 @@
 mod core;
 mod nodes;
 
-pub use crate::core::{Blackboard, Context, Status};
+pub use crate::core::{Context, Status};
 pub use crate::nodes::{
     AlwaysFails, AlwaysRunning, AlwaysSucceeds, BehaviorNode, SequenceNode, SyncLeafNode,
 };

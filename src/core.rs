@@ -7,26 +7,14 @@ pub enum Status {
     Running,
 }
 
-pub struct Blackboard {
-    blackboard: HashMap<String, Box<dyn Any>>,
-}
-
-impl Blackboard {
-    pub fn new() -> Self {
-        Blackboard {
-            blackboard: HashMap::new(),
-        }
-    }
-}
-
 pub struct Context {
-    blackboard: Blackboard,
+    blackboard: HashMap<String, Box<dyn Any>>,
 }
 
 impl Context {
     pub fn new() -> Self {
         Context {
-            blackboard: Blackboard::new(),
+            blackboard: HashMap::new(),
         }
     }
 }
