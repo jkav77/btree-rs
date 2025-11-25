@@ -68,3 +68,12 @@ impl BehaviorNode for SequenceNode {
         Status::Success
     }
 }
+
+#[macro_export]
+macro_rules! sequence {
+    ($($node:expr),+ $(,)?) => {{
+        let nodes: Vec<Box<dyn $crate::BehaviorNode>> =
+            vec![$(Box::new($node) as Box<dyn $crate::BehaviorNode>),+];
+        $crate::SequenceNode::new(nodes)
+    }};
+}

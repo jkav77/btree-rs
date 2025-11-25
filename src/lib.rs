@@ -6,21 +6,13 @@ pub use crate::nodes::{
     AlwaysFails, AlwaysRunning, AlwaysSucceeds, BehaviorNode, SequenceNode, SyncLeafNode,
 };
 
-#[macro_export]
-macro_rules! sequence {
-    ($($node:expr),+ $(,)?) => {{
-        let nodes: Vec<Box<dyn $crate::BehaviorNode>> =
-            vec![$(Box::new($node) as Box<dyn $crate::BehaviorNode>),+];
-        $crate::SequenceNode::new(nodes)
-    }};
-}
-
 #[cfg(test)]
 mod tests {
     use crate::{
-        AlwaysFails, AlwaysRunning, AlwaysSucceeds,
+        AlwaysSucceeds,
         core::{Context, Status},
-        nodes::{BehaviorNode, SyncLeafNode},
+        nodes::{AlwaysFails, AlwaysRunning, BehaviorNode, SyncLeafNode},
+        sequence,
     };
 
     #[test]
