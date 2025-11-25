@@ -1,17 +1,26 @@
 mod core;
 mod nodes;
 
-pub use crate::core::{Context, Status};
+pub use crate::core::{Blackboard, Context, Status};
 pub use crate::nodes::{
     AlwaysFails, AlwaysRunning, AlwaysSucceeds, BehaviorNode, SequenceNode, SyncLeafNode,
 };
+
+#[macro_export]
+macro_rules! sequence {
+    ($($node:expr),+ $(,)?) => {{
+        let nodes: Vec<Box<dyn $crate::BehaviorNode>> =
+            vec![$(Box::new($node) as Box<dyn $crate::BehaviorNode>),+];
+        $crate::SequenceNode::new(nodes)
+    }};
+}
 
 #[cfg(test)]
 mod tests {
     use crate::{
         AlwaysFails, AlwaysRunning, AlwaysSucceeds,
         core::{Context, Status},
-        nodes::{BehaviorNode, SequenceNode, SyncLeafNode},
+        nodes::{BehaviorNode, SyncLeafNode},
     };
 
     #[test]
@@ -39,31 +48,23 @@ mod tests {
     #[test]
     fn sequence_fails() {
         let mut ctx = Context::new();
-        let nodes: Vec<Box<dyn BehaviorNode>> =
-            vec![Box::new(AlwaysFails {}), Box::new(AlwaysSucceeds {})];
-        let sequence_node = SequenceNode::new(nodes);
+        let sequence_node = sequence![AlwaysFails {}, AlwaysSucceeds {}];
         assert_eq!(sequence_node.tick(&mut ctx), Status::Failure);
 
-        let nodes: Vec<Box<dyn BehaviorNode>> =
-            vec![Box::new(AlwaysSucceeds {}), Box::new(AlwaysFails {})];
-        let sequence_node = SequenceNode::new(nodes);
+        let sequence_node = sequence![AlwaysSucceeds {}, AlwaysFails {}];
         assert_eq!(sequence_node.tick(&mut ctx), Status::Failure);
     }
 
     #[test]
     fn sequence_succeeds() {
-        let nodes: Vec<Box<dyn BehaviorNode>> =
-            vec![Box::new(AlwaysSucceeds {}), Box::new(AlwaysSucceeds {})];
-        let sequence_node = SequenceNode::new(nodes);
+        let sequence_node = sequence![AlwaysSucceeds {}, AlwaysSucceeds {}];
         let mut ctx = Context::new();
         assert_eq!(sequence_node.tick(&mut ctx), Status::Success)
     }
 
     #[test]
     fn sequence_running() {
-        let nodes: Vec<Box<dyn BehaviorNode>> =
-            vec![Box::new(AlwaysRunning {}), Box::new(AlwaysSucceeds {})];
-        let sequence_node = SequenceNode::new(nodes);
+        let sequence_node = sequence![AlwaysRunning {}, AlwaysSucceeds {}];
         let mut ctx = Context::new();
         assert_eq!(sequence_node.tick(&mut ctx), Status::Running)
     }
