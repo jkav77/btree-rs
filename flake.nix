@@ -40,7 +40,7 @@
           ];
 
           shellHook = ''
-            echo "Welcome to the btree dev shell"
+            echo "Welcome to the btree-rs dev shell"
           '';
         };
       }

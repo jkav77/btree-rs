@@ -1,17 +1,24 @@
 use std::{any::Any, collections::HashMap};
 
+/// Execution status returned by a [`BehaviorNode`](crate::BehaviorNode).
 #[derive(Debug, PartialEq)]
 pub enum Status {
+    /// The node finished successfully and execution can continue.
     Success,
+    /// The node failed and the parent needs to respond accordingly.
     Failure,
+    /// The node is mid-flight and should be ticked again on the next update.
     Running,
 }
 
+/// Provides shared mutable state to all nodes in a behavior tree.
 pub struct Context {
+    /// Backing blackboard instance that nodes can use for loose coupling.
     pub blackboard: Blackboard,
 }
 
 impl Context {
+    /// Create a context with an empty [`Blackboard`].
     pub fn new() -> Self {
         Context {
             blackboard: Blackboard::new(),
@@ -25,6 +32,7 @@ pub struct Blackboard {
 }
 
 impl Blackboard {
+    /// Construct an empty blackboard.
     pub fn new() -> Self {
         Self {
             entries: HashMap::new(),
